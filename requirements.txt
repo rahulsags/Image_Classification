@@ -1,9 +1,9 @@
-# Streamlit Cloud Deployment Requirements
+# Streamlit Cloud Deployment Requirements - Python 3.13 Compatible
 streamlit==1.28.1
-numpy==1.24.4
-pillow==10.0.1
-matplotlib==3.8.2
-seaborn==0.13.0
+numpy>=1.26.0
+pillow>=10.0.0
+matplotlib>=3.8.0
+seaborn>=0.13.0
 
 # Flask API requirements (for local development)
 Flask>=2.2.0,<3.0.0
