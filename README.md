@@ -1,16 +1,16 @@
-# 🤖 Image Classification with CNN
+# Image Classification with CNN
 
 A complete machine learning project that performs image classification using a Convolutional Neural Network (CNN) built with TensorFlow and Keras, deployed as a web API using Flask and an interactive interface with Streamlit.
 
-## 🌟 Live Demo
+## Live Demo
 
-**🚀 [Try the app live on Streamlit Cloud](https://imageclassification-rahul.streamlit.app/)**
+**[Try the app live on Streamlit Cloud](https://imageclassification-rahul.streamlit.app/)**
 
 *Note: The live demo shows the interface design. The full TensorFlow model runs locally due to Python 3.13 compatibility constraints on cloud platforms.*
 
 
 
-## 📋 Project Overview
+## Project Overview
 
 This project implements an end-to-end image classification pipeline with the following features:
 
@@ -22,7 +22,12 @@ This project implements an end-to-end image classification pipeline with the fol
 - **Live Deployment**: Successfully deployed on Streamlit Cloud
 - **Comprehensive Evaluation**: Training metrics, confusion matrix, and model performance analysis
 
-## 🚀 Quick Start
+## Quick Start
+
+> **Want to get started immediately? Use the entry point scripts!**
+> - `python run_training.py` - Train the model
+> - `python run_flask.py` - Start Flask API
+> - `python run_streamlit.py` - Start Streamlit app
 
 ### 1. Installation
 
@@ -43,8 +48,11 @@ pip install -r requirements.txt
 ### 2. Train the Model
 
 ```bash
-# Train the CNN model on CIFAR-10 dataset
-python train_cifar.py
+# Train the CNN model on CIFAR-10 dataset (using entry point script)
+python run_training.py
+
+# Or run directly from src directory
+python src/train_cifar.py
 ```
 
 The training script will:
@@ -52,22 +60,31 @@ The training script will:
 - Preprocess images with data augmentation
 - Train a CNN model with early stopping
 - Generate training plots and evaluation metrics
-- Save the trained model as `model.h5` and `best_cifar_model.h5`
+- Save the trained model as `models/model.h5` and `models/best_cifar_model.h5`
 - Achieve ~76% accuracy on test set
 
 ### 3. Run the Applications
 
-**Flask API**:
+**Flask API** (using entry point script):
 ```bash
-python app.py
+python run_flask.py
 ```
 Access the web interface at: `http://localhost:5000`
 
-**Streamlit Interface**:
+**Streamlit Interface** (using entry point script):
 ```bash
-streamlit run streamlit_app_with_tensorflow.py
+python run_streamlit.py
 ```
 Access the interactive interface at: `http://localhost:8501`
+
+**Alternative - Direct execution**:
+```bash
+# Flask API
+python apps/app.py
+
+# Streamlit with TensorFlow
+streamlit run apps/streamlit_app_with_tensorflow.py
+```
 
 ### 4. Test the API
 
@@ -100,32 +117,45 @@ curl -X POST -F "image=@your_image.jpg" http://localhost:5000/predict
 }
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Image_Classification/
-├── train_cifar.py            # CIFAR-10 model training script
-├── app.py                    # Flask API server
-├── streamlit_app.py          # Streamlit interface (demo version)
-├── streamlit_app_with_tensorflow.py  # Full Streamlit interface with TensorFlow
-├── simple_gradio_app.py      # Gradio interface (alternative)
-├── requirements.txt          # Python dependencies
-├── Procfile                  # For Render deployment
-├── .streamlit/               # Streamlit configuration
-├── data/                     # CIFAR-10 dataset (auto-downloaded)
-├── model.h5                  # Trained model (generated)
-├── best_cifar_model.h5       # Best model checkpoint (generated)
-├── class_names.pkl           # CIFAR-10 class labels (generated)
-├── cifar_class_names.pkl     # Alternative class names file
-├── cifar_training_history.png # Training plots (generated)
-├── cifar_confusion_matrix.png # Evaluation metrics (generated)
-├── utils.py                  # Utility functions
-├── README.md                 # Project documentation
-├── DEPLOYMENT.md             # Deployment guide
-└── LICENSE                   # MIT License
+├── Entry Points
+│   ├── run_training.py       # Easy training script launcher
+│   ├── run_flask.py          # Easy Flask API launcher  
+│   └── run_streamlit.py      # Easy Streamlit app launcher
+├── src/                      # Source code and training scripts
+│   ├── train_cifar.py        # CIFAR-10 CNN training implementation
+│   ├── train_model.py        # Alternative training script
+│   └── utils.py              # Utility functions
+├── apps/                     # Web applications
+│   ├── app.py                # Flask API server
+│   ├── streamlit_app.py      # Streamlit demo (cloud deployment)
+│   └── streamlit_app_with_tensorflow.py  # Full Streamlit app with TensorFlow
+├── models/                   # Trained models and metadata
+│   ├── model.h5              # Final trained CNN model
+│   ├── best_cifar_model.h5   # Best model checkpoint during training
+│   ├── class_names.pkl       # CIFAR-10 class labels
+│   └── cifar_class_names.pkl # Alternative class names file
+├── outputs/                  # Training results and visualizations
+│   ├── cifar_training_history.png # Training/validation curves
+│   └── cifar_confusion_matrix.png # Model performance evaluation
+├── deployment/               # Deployment configurations
+│   ├── Procfile              # Render.com deployment config
+│   └── DEPLOYMENT.md         # Deployment instructions
+├── data/                     # Dataset (auto-downloaded during training)
+├── Configuration Files
+│   ├── requirements.txt      # Python dependencies
+│   ├── .streamlit/           # Streamlit app configuration
+│   ├── .gitignore           # Git ignore rules
+│   └── .python-version      # Python version specification
+└── Documentation
+    ├── README.md             # Main project documentation
+    └── LICENSE               # MIT License
 ```
 
-## 🧠 Model Architecture
+## Model Architecture
 
 The CNN model includes:
 
@@ -143,7 +173,7 @@ The CNN model includes:
 - Model checkpointing for best weights
 - Achieved 76.35% accuracy on CIFAR-10 test set
 
-## 📊 Training Details
+## Training Details
 
 ### Dataset
 - **Source**: CIFAR-10 (Canadian Institute for Advanced Research)
@@ -167,7 +197,7 @@ The CNN model includes:
 - Horizontal flip: Yes
 - Zoom: ±20%
 
-## 🌐 Deployment
+## Deployment
 
 ### ✅ Streamlit Cloud (Currently Live)
 
@@ -192,7 +222,7 @@ streamlit run streamlit_app_with_tensorflow.py
 ```
 
 
-## 🔧 API Endpoints
+## API Endpoints
 
 ### Main Endpoints
 
@@ -239,7 +269,7 @@ streamlit run streamlit_app_with_tensorflow.py
 }
 ```
 
-## 📈 Model Performance
+## Model Performance
 
 After training, the model generates:
 
@@ -264,11 +294,11 @@ After training, the model generates:
 - **Test Accuracy**: 76.35%
 - **Model Size**: 3.31 MB (866,602 parameters)
 
-## 🛠️ Customization
+## Customization
 
 ### Using Different Datasets
 
-1. **Modify `train_cifar.py`**:
+1. **Modify `src/train_cifar.py`**:
    ```python
    # Change the dataset loading logic
    # CIFAR-10 is loaded automatically with:
@@ -288,7 +318,7 @@ After training, the model generates:
 ### Model Architecture Changes
 
 ```python
-# In train_cifar.py, modify the SimpleCIFARClassifier class
+# In src/train_cifar.py, modify the SimpleCIFARClassifier class
 class SimpleCIFARClassifier:
     def build_model(self):
         model = tf.keras.Sequential([
@@ -360,7 +390,7 @@ class SimpleCIFARClassifier:
    - Implement model caching
    - Optimize image preprocessing
 
-## 📝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/new-feature`)
@@ -368,11 +398,11 @@ class SimpleCIFARClassifier:
 4. Push to branch (`git push origin feature/new-feature`)
 5. Create a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the Apache License 2.0 - see the LICENSE file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **TensorFlow/Keras** for the deep learning framework
 - **CIFAR-10 Dataset** by the Canadian Institute for Advanced Research
@@ -381,15 +411,15 @@ This project is licensed under the Apache License 2.0 - see the LICENSE file for
 - **Streamlit Cloud** for hosting the live demo
 - **GitHub** for version control and collaboration
 
-## 📊 Project Stats
+## Project Stats
 
-- **⭐ Model Accuracy**: 76.35% on CIFAR-10 test set
-- **🖼️ Images Processed**: 60,000 CIFAR-10 images during training
-- **🧠 Model Parameters**: 866,602 trainable parameters
-- **⚡ Inference Time**: ~250ms per image (local)
-- **📦 Model Size**: 3.31 MB
+- **Model Accuracy**: 76.35% on CIFAR-10 test set
+- **Images Processed**: 60,000 CIFAR-10 images during training
+- **Model Parameters**: 866,602 trainable parameters
+- **Inference Time**: ~250ms per image (local)
+- **Model Size**: 3.31 MB
 
-## 📞 Support
+## Support
 
 If you encounter any issues or have questions:
 
@@ -399,7 +429,7 @@ If you encounter any issues or have questions:
 4. **Ensure all dependencies** are correctly installed
 5. **Check Python version compatibility** (3.11 recommended for full features)
 
-## 🚀 What's Next?
+## What's Next?
 
 - **Improve Model**: Experiment with different architectures (ResNet, EfficientNet)
 - **Add More Datasets**: Support for CIFAR-100, custom datasets
@@ -409,8 +439,8 @@ If you encounter any issues or have questions:
 
 ---
 
-**🎯 Happy Learning and Coding! 🚀**
+**Happy Learning and Coding!**
 
-*Built with ❤️ using TensorFlow, Keras, Flask, and Streamlit*
+*Built with care using TensorFlow, Keras, Flask, and Streamlit*
 
-**🌐 Live Demo**: [https://imageclassification-rahul.streamlit.app/](https://imageclassification-rahul.streamlit.app/)
+**Live Demo**: [https://imageclassification-rahul.streamlit.app/](https://imageclassification-rahul.streamlit.app/)
