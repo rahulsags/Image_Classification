@@ -1,122 +1,60 @@
 import streamlit as st
-import tensorflow as tf
 import numpy as np
 from PIL import Image
-import pickle
-import os
 import io
 
 # Page configuration
 st.set_page_config(
-    page_title="Image Classification App",
+    page_title="Image Classification App - Demo",
     page_icon="🤖",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Global variables
-@st.cache_resource
-def load_model_and_classes():
-    """Load the trained model and class names"""
-    try:
-        # Check for model files
-        model_path = 'model.h5'
-        classes_path = 'class_names.pkl'
-        
-        if not os.path.exists(model_path):
-            st.error("⚠️ Model file not found! Please ensure 'model.h5' is in the repository.")
-            return None, None
-            
-        # Load model
-        model = tf.keras.models.load_model(model_path)
-        
-        # Load class names
-        if os.path.exists(classes_path):
-            with open(classes_path, 'rb') as f:
-                class_names = pickle.load(f)
-        else:
-            class_names = ['Cat', 'Dog']  # Default
-        
-        return model, class_names
-    except Exception as e:
-        st.error(f"Error loading model: {str(e)}")
-        return None, None
+# Demo mode message
+st.warning("⚠️ **Demo Mode**: TensorFlow is not compatible with Python 3.13 on Streamlit Cloud yet. This is a demo version showing the UI.")
 
-def preprocess_image(image):
-    """Preprocess image for prediction"""
-    # Convert to RGB if needed
-    if image.mode != 'RGB':
-        image = image.convert('RGB')
+def demo_predict(image):
+    """Simulate prediction for demo purposes"""
+    # Simulate processing time
+    import time
+    import random
+    time.sleep(1)
     
-    # Resize to model input size (32x32 for CIFAR-10)
-    image = image.resize((32, 32))
+    # CIFAR-10 classes
+    class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
     
-    # Convert to numpy array and normalize
-    img_array = np.array(image)
-    img_array = img_array.astype('float32') / 255.0
+    # Generate random predictions for demo
+    predictions = np.random.dirichlet(np.ones(10), size=1)[0]
     
-    # Add batch dimension
-    img_array = np.expand_dims(img_array, axis=0)
+    # Get the predicted class
+    predicted_class_idx = np.argmax(predictions)
+    confidence = float(predictions[predicted_class_idx])
+    predicted_class = class_names[predicted_class_idx]
     
-    return img_array
-
-def predict_image(image, model, class_names):
-    """Predict image class using the trained model"""
-    try:
-        # Preprocess image
-        processed_image = preprocess_image(image)
-        
-        # Make prediction
-        predictions = model.predict(processed_image)
-        
-        # Get the predicted class
-        predicted_class_idx = np.argmax(predictions[0])
-        confidence = float(predictions[0][predicted_class_idx])
-        predicted_class = class_names[predicted_class_idx]
-        
-        # Get all probabilities
-        all_predictions = {class_names[i]: float(predictions[0][i]) for i in range(len(class_names))}
-        
-        return predicted_class, confidence, all_predictions
+    # Get all probabilities
+    all_predictions = {class_names[i]: float(predictions[i]) for i in range(len(class_names))}
     
-    except Exception as e:
-        return None, None, str(e)
+    return predicted_class, confidence, all_predictions
 
 # Main app
 def main():
-    # Title and description
-    st.title("🤖 Image Classification with CNN")
-    st.markdown("---")
-    
+    st.title("🖼️ AI Image Classifier")
     st.markdown("""
-    ### Welcome to our Image Classification App!
+    ### 🚧 Demo Version
+    This is a demonstration of the Image Classification interface. The actual CNN model requires TensorFlow, 
+    which is not yet compatible with Python 3.13 on Streamlit Cloud.
     
-    This application uses a **Convolutional Neural Network (CNN)** trained with TensorFlow/Keras 
-    to classify images. Upload an image and get instant predictions with confidence scores.
-    
-        """)
-    
-    # Load model
-    model, class_names = load_model_and_classes()
-    
-    if model is None or class_names is None:
-        st.error("❌ Model not found! Please train the model first by running `train_model.py`")
-        st.stop()
-    
-    st.success(f"✅ Model loaded successfully! Classes: {', '.join(class_names)}")
+    **Full Version Features:**
+    - 🧠 Deep CNN with multiple convolutional layers
+    - 📊 Trained on CIFAR-10 dataset (76.35% accuracy)
+    - ⚡ Real-time image classification
+    - 🎯 10 different object classes
+    """)
     
     # Sidebar
     st.sidebar.title("🔧 Settings")
     st.sidebar.markdown("---")
-    
-    # Model info in sidebar
-    st.sidebar.markdown("### Model Information")
-    st.sidebar.info(f"""
-    **Classes:** {len(class_names)}
-    **Input Size:** 32×32×3
-    **Architecture:** CNN with {len(model.layers)} layers
-    **Framework:** TensorFlow/Keras
-    """)
     
     # File uploader
     st.sidebar.markdown("### 📁 Upload Image")
@@ -124,6 +62,16 @@ def main():
         "Choose an image file",
         type=['jpg', 'jpeg', 'png', 'bmp', 'tiff'],
         help="Supported formats: JPG, JPEG, PNG, BMP, TIFF"
+    )
+    
+    # Confidence threshold
+    confidence_threshold = st.sidebar.slider(
+        "Confidence Threshold",
+        min_value=0.0,
+        max_value=1.0,
+        value=0.5,
+        step=0.1,
+        help="Minimum confidence for predictions"
     )
     
     # Main content area
@@ -138,95 +86,72 @@ def main():
             st.image(image, caption="Uploaded Image", use_container_width=True)
             
             # Image info
-            st.markdown(f"""
-            **Image Info:**
-            - **Size:** {image.size[0]} × {image.size[1]} pixels
-            - **Mode:** {image.mode}
-            - **Format:** {image.format}
-            """)
-            
+            st.markdown("### 📊 Image Information")
+            col_info1, col_info2, col_info3 = st.columns(3)
+            with col_info1:
+                st.metric("Width", f"{image.size[0]}px")
+            with col_info2:
+                st.metric("Height", f"{image.size[1]}px")
+            with col_info3:
+                st.metric("Mode", image.mode)
         else:
-            # Placeholder
-            st.info("👆 Please upload an image using the sidebar")
-            st.image("https://via.placeholder.com/300x300?text=Upload+Image", 
-                    caption="Waiting for image...", use_column_width=True)
+            st.info("👆 Upload an image using the sidebar to get started!")
     
     with col2:
-        st.markdown("### 🔍 Prediction Results")
+        st.markdown("### 🎯 Prediction Results")
         
         if uploaded_file is not None:
-            with st.spinner("🔄 Analyzing image..."):
-                # Make prediction
-                predicted_class, confidence, all_predictions = predict_image(image, model, class_names)
+            if st.button("🔮 Predict (Demo)", type="primary", use_container_width=True):
+                with st.spinner("🤖 Analyzing image... (Demo Mode)"):
+                    predicted_class, confidence, all_predictions = demo_predict(image)
                 
-                if predicted_class is not None:
-                    # Display main prediction
-                    st.success(f"**Predicted Class:** {predicted_class}")
-                    st.success(f"**Confidence:** {confidence:.2%}")
-                    
-                    # Progress bar for confidence
-                    st.progress(confidence)
-                    
-                    # All predictions
-                    st.markdown("### 📊 All Class Probabilities")
-                    
-                    for class_name, prob in sorted(all_predictions.items(), key=lambda x: x[1], reverse=True):
-                        st.metric(
-                            label=class_name,
-                            value=f"{prob:.2%}",
-                            delta=None
-                        )
-                        st.progress(prob)
-                    
-                    # Interpretation
-                    st.markdown("### Interpretation")
-                    if confidence > 0.8:
-                        st.success("**High Confidence:** The model is very confident about this prediction!")
-                    elif confidence > 0.6:
-                        st.warning("**Medium Confidence:** The model is reasonably confident.")
-                    else:
-                        st.error("**Low Confidence:** The model is uncertain. Try a clearer image.")
-                
+                if confidence >= confidence_threshold:
+                    st.success(f"**Prediction: {predicted_class.upper()}**")
+                    st.metric("Confidence", f"{confidence:.2%}")
                 else:
-                    st.error(f"❌ **Error during prediction:** {all_predictions}")
-        
+                    st.warning(f"Low confidence prediction: {predicted_class}")
+                    st.metric("Confidence", f"{confidence:.2%}")
+                
+                # Detailed predictions
+                st.markdown("### 📈 All Predictions")
+                
+                # Sort predictions by confidence
+                sorted_predictions = sorted(all_predictions.items(), key=lambda x: x[1], reverse=True)
+                
+                # Create progress bars for top 5 predictions
+                for class_name, prob in sorted_predictions[:5]:
+                    st.write(f"**{class_name.capitalize()}**")
+                    st.progress(prob)
+                    st.caption(f"{prob:.2%}")
+                
+                # Show prediction table
+                with st.expander("📋 Detailed Results"):
+                    prediction_data = []
+                    for class_name, prob in sorted_predictions:
+                        prediction_data.append({
+                            "Class": class_name.capitalize(),
+                            "Probability": f"{prob:.4f}",
+                            "Percentage": f"{prob:.2%}"
+                        })
+                    st.dataframe(prediction_data, use_container_width=True)
         else:
-            st.info("Upload an image to see prediction results here.")
-    
-    # Additional features
-    st.markdown("---")
-    
-    # Expander for technical details
-    with st.expander("Technical Details"):
-        st.markdown("""
-        ### Model Architecture
-        - **Input Layer:** 32×32×3 (RGB images)
-        - **Convolutional Layers:** Multiple Conv2D layers with ReLU activation
-        - **Pooling Layers:** MaxPooling2D for spatial downsampling
-        - **Regularization:** Batch Normalization and Dropout
-        - **Output Layer:** Dense layer with Softmax activation
-        
-        ### Preprocessing Pipeline
-        1. **Resize:** Images are resized to 32×32 pixels
-        2. **Normalization:** Pixel values are scaled to [0, 1] range
-        3. **Format:** Converted to RGB if needed
-        4. **Batching:** Single image is expanded to batch dimension
-        
-        ### Training Details
-        - **Optimizer:** Adam with adaptive learning rate
-        - **Loss Function:** Categorical Crossentropy
-        - **Callbacks:** EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
-        - **Data Augmentation:** Rotation, zoom, flip, shift
-        """)
+            st.info("Upload an image to see predictions here!")
     
     # Footer
     st.markdown("---")
     st.markdown("""
-    <div style='text-align: center; color: #666;'>
-        Built with ❤️ by M Rahul Sagayaraj<br>
-        <small>Image Classification CNN • Deep Learning • Computer Vision</small>
-    </div>
-    """, unsafe_allow_html=True)
+    ### 💡 About This Demo
+    
+    **Tech Stack:**
+    - 🎨 **Frontend**: Streamlit
+    - 🧠 **AI Model**: CNN (Convolutional Neural Network)
+    - 📊 **Dataset**: CIFAR-10 (10 object classes)
+    - 🔧 **Framework**: TensorFlow/Keras
+    
+    **GitHub Repository**: [rahulsags/Image_Classification](https://github.com/rahulsags/Image_Classification)
+    
+    🚧 **Note**: This is a demo version. The full version with trained CNN model will be available once TensorFlow supports Python 3.13 on Streamlit Cloud.
+    """)
 
 if __name__ == "__main__":
     main()
