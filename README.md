@@ -2,6 +2,9 @@
 
 A complete machine learning project that performs image classification using a Convolutional Neural Network (CNN) built with TensorFlow and Keras, deployed as a web API using Flask and an interactive interface with Streamlit.
 
+<img width="1918" height="966" alt="image" src="https://github.com/user-attachments/assets/f1a78d08-31a4-4910-8ec7-b4ea620857ad" />
+
+
 ## Live Demo
 
 **[Try the app live on Streamlit Cloud](https://imageclassification-rahul.streamlit.app/)**
