@@ -124,10 +124,6 @@ curl -X POST -F "image=@your_image.jpg" http://localhost:5000/predict
 
 ```
 Image_Classification/
-├── Entry Points
-│   ├── run_training.py       # Easy training script launcher
-│   ├── run_flask.py          # Easy Flask API launcher  
-│   └── run_streamlit.py      # Easy Streamlit app launcher
 ├── src/                      # Source code and training scripts
 │   ├── train_cifar.py        # CIFAR-10 CNN training implementation
 │   ├── train_model.py        # Alternative training script
@@ -148,14 +144,18 @@ Image_Classification/
 │   ├── Procfile              # Render.com deployment config
 │   └── DEPLOYMENT.md         # Deployment instructions
 ├── data/                     # Dataset (auto-downloaded during training)
-├── Configuration Files
-│   ├── requirements.txt      # Python dependencies
-│   ├── .streamlit/           # Streamlit app configuration
-│   ├── .gitignore           # Git ignore rules
-│   └── .python-version      # Python version specification
-└── Documentation
-    ├── README.md             # Main project documentation
-    └── LICENSE               # MIT License
+├── requirements.txt      # Python dependencies
+├── .streamlit/           # Streamlit app configuration
+├── .gitignore           # Git ignore rules
+├── .python-version      # Python version specification
+├── README.md             # Main project documentation
+├── LICENSE               # Apache 2.0 License
+├── run_training.py       # Easy training script launcher
+├── run_flask.py       # Easy training script launcher
+└── run_streamlit.py      # Easy Streamlit app launcher
+
+  
+    
 ```
 
 ## Model Architecture
