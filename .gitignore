@@ -1,0 +1,79 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+.env
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Data and Training Files (too large for GitHub)
+data/
+*.csv
+*.zip
+*.tar.gz
+
+# Training artifacts (keep the important ones, remove duplicates)
+# cifar_confusion_matrix.png  # Keep this - shows model performance
+# cifar_training_history.png  # Keep this - shows training progress
+# best_cifar_model.h5         # Keep this - backup model
+
+# Testing files (not needed for deployment)
+# test_*.py                   # Remove test files from gitignore
+
+# Training scripts (keep these - show your work!)
+# train_*.py                  # Keep training scripts
+
+# Gradio files (not working)
+gradio_app.py
+simple_gradio_app.py
+flagged/
+
+# Jupyter notebooks (if any)
+*.ipynb
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
