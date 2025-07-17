@@ -124,13 +124,18 @@ curl -X POST -F "image=@your_image.jpg" http://localhost:5000/predict
 
 ```
 Image_Classification/
+├── Entry Points
+│   ├── run_training.py       # Easy training script launcher
+│   ├── run_flask.py          # Easy Flask API launcher  
+│   ├── run_streamlit.py      # Easy Streamlit app launcher
+│   └── streamlit_app.py      # Entry point for Streamlit Cloud deployment
 ├── src/                      # Source code and training scripts
 │   ├── train_cifar.py        # CIFAR-10 CNN training implementation
 │   ├── train_model.py        # Alternative training script
 │   └── utils.py              # Utility functions
 ├── apps/                     # Web applications
 │   ├── app.py                # Flask API server
-│   ├── streamlit_app.py      # Streamlit demo (cloud deployment)
+│   ├── streamlit_demo_app.py # Streamlit demo (reference version)
 │   └── streamlit_app_with_tensorflow.py  # Full Streamlit app with TensorFlow
 ├── models/                   # Trained models and metadata
 │   ├── model.h5              # Final trained CNN model
@@ -144,18 +149,14 @@ Image_Classification/
 │   ├── Procfile              # Render.com deployment config
 │   └── DEPLOYMENT.md         # Deployment instructions
 ├── data/                     # Dataset (auto-downloaded during training)
-├── requirements.txt      # Python dependencies
-├── .streamlit/           # Streamlit app configuration
-├── .gitignore           # Git ignore rules
-├── .python-version      # Python version specification
-├── README.md             # Main project documentation
-├── LICENSE               # Apache 2.0 License
-├── run_training.py       # Easy training script launcher
-├── run_flask.py       # Easy training script launcher
-└── run_streamlit.py      # Easy Streamlit app launcher
-
-  
-    
+├── Configuration Files
+│   ├── requirements.txt      # Python dependencies
+│   ├── .streamlit/           # Streamlit app configuration
+│   ├── .gitignore            # Git ignore rules
+│   └── .python-version       # Python version specification
+└── Documentation
+    ├── README.md             # Main project documentation
+    └── LICENSE               # Apache 2.0 License
 ```
 
 ## Model Architecture
