@@ -48,6 +48,18 @@ Thumbs.db
 # Data and Training Files (too large for GitHub)
 data/
 *.csv
+
+# Prevent duplicate files from being tracked
+/app.py
+/train_cifar.py
+/train_model.py
+/utils.py
+/gradio_app.py
+/simple_gradio_app.py
+/streamlit_demo.py
+/test_*.py
+/requirements_*.txt
+flagged/
 *.zip
 *.tar.gz
 
