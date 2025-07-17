@@ -18,5 +18,5 @@ if __name__ == "__main__":
     print("=" * 50)
     
     # Import and run the Flask app
-    from app import app
+    from apps.app import app
     app.run(debug=True, host='0.0.0.0', port=5000)
